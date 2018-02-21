@@ -11,6 +11,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.parse.ParseException;
+import com.parse.ParseUser;
+import com.parse.SignUpCallback;
+
 import butterknife.ButterKnife;
 import butterknife.Bind;
 
@@ -74,18 +78,29 @@ public class SignupActivity extends AppCompatActivity {
         String password = _passwordText.getText().toString();
         String reEnterPassword = _reEnterPasswordText.getText().toString();
 
-        // TODO: Implement your own signup logic here.
 
-        new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
-                        // On complete call either onSignupSuccess or onSignupFailed
-                        // depending on success
-                        onSignupSuccess();
-                        // onSignupFailed();
-                        progressDialog.dismiss();
-                    }
-                }, 3000);
+        ParseUser newUser = new ParseUser();
+        newUser.setUsername(email);
+        newUser.setPassword(password);
+        newUser.put("country", address);
+        newUser.put("UserFullName", name);
+        newUser.put("Score", 0);
+        newUser.put("mobile", mobile);
+
+        newUser.signUpInBackground(new SignUpCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null) {
+                    Toast.makeText(SignupActivity.this, "Sign Up successful", Toast.LENGTH_SHORT).show();
+                    Intent homeActivity = new Intent(getApplicationContext(), HomeActivity.class);
+                    startActivity(homeActivity);
+                    onSignupSuccess();
+                } else {
+                    //Toast.makeText(SignupActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                    onSignupFailed();
+                }
+            }
+        });
     }
 
 

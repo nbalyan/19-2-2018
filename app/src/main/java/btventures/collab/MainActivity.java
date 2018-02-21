@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.parse.ParseUser;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -14,9 +16,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        if(/*ParseUser.getCurrentUser() != null*/false){ //Uncomment
+            Intent adActivity = new Intent(getApplicationContext(), HomeActivity.class);
+            startActivity(adActivity);
+            finish();
 
-        Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
+        }else{
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
 
     @Override
